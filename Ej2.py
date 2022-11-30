@@ -20,7 +20,8 @@ def main():
     dirs2 = os.listdir(path2)
 
     listadirs = [dirs1, dirs2]
-    sizeFile(listadirs[0])
+    for i in range(2):
+        sizeFile(listadirs[i])
     
 
     #pool = Pool(processes=numberThreads)

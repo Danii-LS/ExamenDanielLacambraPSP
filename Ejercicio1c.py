@@ -3,11 +3,6 @@ import time
 import random
 import queue
 
-# Productor Consumidor mediante cola sincronizada tal que:
-
-# Productor produce números mayor que 10 y menor que 1000
-# Produce 10 numeros cada vez que los almacena en cola
-# tiempo de espera entre la generacion de un num y otro es 1 segundo 
 
 class Producer(threading.Thread):
     def __init__(self,queue):
@@ -28,9 +23,6 @@ class Producer(threading.Thread):
             time.sleep(1)
 
 
-
-# consumer: lee 3 numeros de la cola de golpe y calcula el MCD
-# tiempo espera: entre lectura de 3 elementos de la cola y la siguiente lectura de los siguientes 3 elementos es de 4 segundos
 class Consumer(threading.Thread):
     def __init__(self,queue):
         threading.Thread.__init__(self)
@@ -39,19 +31,19 @@ class Consumer(threading.Thread):
     def run(self):
         recogidaNums = []
         while True:
-            for i in range(3):
+            for i in range(4):
                 num = self.queue.get()
                 recogidaNums.append(num)
 
             resultMcd = calculoMcd(recogidaNums)
             print('El MCD es %d . Sacado por %s' %(res, self.name))
             self.queue.task_done()
-            time.sleep(4)       # tiempo espera: 4 segundos
+            time.sleep(10)       
 
 
     def calculoMcd(recogidaNums):
         res = recogidaNums[0]
-        for i in range(3):
+        for i in range(4):
             res = mcd(recogidaNums[i], res)
             if(res == 1):
                 return 1
@@ -71,16 +63,51 @@ class Consumer(threading.Thread):
 
 
 
-# relación productor:consumidor -> 1:1
+# relación productor:consumidor -> 2:10
 def main():
     global queue
     queue = queue.Queue()
     p1 = Producer(queue)
+    p2 = Producer(queue)
+
     c1 = Consumer(queue)
+    c2 = Consumer(queue)
+    c3 = Consumer(queue)
+    c4 = Consumer(queue)
+    c5 = Consumer(queue)
+    c6 = Consumer(queue)
+    c7 = Consumer(queue)
+    c8 = Consumer(queue)
+    c9 = Consumer(queue)
+    c10 = Consumer(queue)
+
     p1.start()
+    p2.start()
     c1.start()
+    c2.start()
+    c3.start()
+    c4.start()
+    c5.start()
+    c6.start()
+    c7.start()
+    c8.start()
+    c9.start()
+    c10.start()
+
+    
     p1.join()
+    p2.join()
     c1.join()
+    c2.join()
+    c3.join()
+    c4.join()
+    c5.join()
+    c6.join()
+    c7.join()
+    c8.join()
+    c9.join()
+    c10.join()
+
 
 if __name__ == '__main__':
     main()

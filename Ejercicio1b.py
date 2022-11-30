@@ -3,11 +3,6 @@ import time
 import random
 import queue
 
-# Productor Consumidor mediante cola sincronizada tal que:
-
-# Productor produce números mayor que 10 y menor que 1000
-# Produce 10 numeros cada vez que los almacena en cola
-# tiempo de espera entre la generacion de un num y otro es 1 segundo 
 
 class Producer(threading.Thread):
     def __init__(self,queue):
@@ -25,12 +20,9 @@ class Producer(threading.Thread):
                 self.queue.put(listaNums[i])
                 print('%d metido en cola por %s' %(listaNums[i], self.name))
             listaNums=[]
-            time.sleep(1)
+            time.sleep(2)
 
 
-
-# consumer: lee 3 numeros de la cola de golpe y calcula el MCD
-# tiempo espera: entre lectura de 3 elementos de la cola y la siguiente lectura de los siguientes 3 elementos es de 4 segundos
 class Consumer(threading.Thread):
     def __init__(self,queue):
         threading.Thread.__init__(self)
@@ -39,7 +31,7 @@ class Consumer(threading.Thread):
     def run(self):
         recogidaNums = []
         while True:
-            for i in range(3):
+            for i in range(2):
                 num = self.queue.get()
                 recogidaNums.append(num)
 
@@ -51,7 +43,7 @@ class Consumer(threading.Thread):
 
     def calculoMcd(recogidaNums):
         res = recogidaNums[0]
-        for i in range(3):
+        for i in range(2):
             res = mcd(recogidaNums[i], res)
             if(res == 1):
                 return 1
@@ -71,16 +63,31 @@ class Consumer(threading.Thread):
 
 
 
-# relación productor:consumidor -> 1:1
+# relación productor:consumidor -> 4:2
 def main():
     global queue
     queue = queue.Queue()
     p1 = Producer(queue)
+    p2 = Producer(queue)
+    p3 = Producer(queue)
+    p4 = Producer(queue)
+
     c1 = Consumer(queue)
+    c2 = Consumer(queue)
+
     p1.start()
+    p2.start()
+    p3.start()
+    p4.start()
     c1.start()
+    c2.start()
+
     p1.join()
+    p2.join()
+    p3.join()
+    p4.join()
     c1.join()
+    c2.join()
 
 if __name__ == '__main__':
     main()
